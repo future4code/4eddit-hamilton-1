@@ -107,6 +107,78 @@ export default class PostsPage extends Component {
               </PostActions>
             </PostContent>
           </Post>
+          <Post>
+            <RateBar>
+              <RateButton>
+                <GoArrowUp color="#999" size="20px" />
+              </RateButton>
+              {50}
+              <RateButton>
+                <GoArrowDown color="#999" size="20px" />
+              </RateButton>
+            </RateBar>
+            <PostContent>
+              <PostUser>Darvas</PostUser>
+              <PostText>
+                Texto legal sdasd asd sa <br /> dasd adasd asdsa sa <br /> dasd
+                adasd asdsa sa <br /> dasd adasd asdsa sa <br /> dasd adasd
+                asdsa sa <br /> dasd adasd asdsa
+              </PostText>
+              <PostActions>
+                <PostButton>
+                  <FaCommentAlt />3 Comments
+                </PostButton>
+              </PostActions>
+            </PostContent>
+          </Post>
+          <Post>
+            <RateBar>
+              <RateButton>
+                <GoArrowUp color="#999" size="20px" />
+              </RateButton>
+              {50}
+              <RateButton>
+                <GoArrowDown color="#999" size="20px" />
+              </RateButton>
+            </RateBar>
+            <PostContent>
+              <PostUser>Darvas</PostUser>
+              <PostText>
+                Texto legal sdasd asd sa <br /> dasd adasd asdsa sa <br /> dasd
+                adasd asdsa sa <br /> dasd adasd asdsa sa <br /> dasd adasd
+                asdsa sa <br /> dasd adasd asdsa
+              </PostText>
+              <PostActions>
+                <PostButton>
+                  <FaCommentAlt />3 Comments
+                </PostButton>
+              </PostActions>
+            </PostContent>
+          </Post>
+          <Post>
+            <RateBar>
+              <RateButton>
+                <GoArrowUp color="#999" size="20px" />
+              </RateButton>
+              {50}
+              <RateButton>
+                <GoArrowDown color="#999" size="20px" />
+              </RateButton>
+            </RateBar>
+            <PostContent>
+              <PostUser>Darvas</PostUser>
+              <PostText>
+                Texto legal sdasd asd sa <br /> dasd adasd asdsa sa <br /> dasd
+                adasd asdsa sa <br /> dasd adasd asdsa sa <br /> dasd adasd
+                asdsa sa <br /> dasd adasd asdsa
+              </PostText>
+              <PostActions>
+                <PostButton>
+                  <FaCommentAlt />3 Comments
+                </PostButton>
+              </PostActions>
+            </PostContent>
+          </Post>
         </Main>
       </Container>
     );
