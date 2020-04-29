@@ -7,8 +7,7 @@ import ListaDePosts from "../ListaDePosts";
 import PaginaDePost from "../PaginaDePost";
 
 
-
-const routes = {
+export const routes = {
   root: "/",
   cadastro: "/cadastro",
   listaDePosts: "/listaDePosts",

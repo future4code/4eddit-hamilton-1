@@ -1,14 +1,31 @@
-import React, { Component } from "./node_modules/react";
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { push } from "connected-react-router";
+import { routes } from "../Router";
 
-class PaginaDePost extends React.Component {
+class PaginaDePost extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      
+    }
+  }
     render() {
       return (
         <div>
-          Oie
+          <button onClick={this.props.goToLoginPage}>Login</button>
         </div>
       );
     }
   }
   
-  export default PaginaDePost;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    goToLoginPage: () => dispatch(push(routes.root)),
+  };
+};
+
+
+
+  export default connect(null, mapDispatchToProps)(PaginaDePost);
   

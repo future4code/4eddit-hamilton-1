@@ -1,14 +1,30 @@
-import React, { Component } from "./node_modules/react";
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { push } from "connected-react-router";
+import { routes } from "../Router";
 
-class ListaDePosts extends React.Component {
+class ListaDePosts extends Component {
     render() {
-      return (
-        <div>
-          Oie
-        </div>
+      return ( 
+    <form>
+      <textarea></textarea>
+      <button onClick={this.props.goToPostsPage}>Postar</button>
+    </form>
+      
       );
     }
   }
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    goToPostsPage: () => dispatch(push(routes.paginaDePost)),
+  };
+};
+
+
+
+
+
   
-  export default ListaDePosts;
+  export default connect(null, mapDispatchToProps)(ListaDePosts);
   
