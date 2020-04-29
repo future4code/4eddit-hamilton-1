@@ -10,6 +10,10 @@ class PaginaDePost extends Component {
       
     }
   }
+  componentDidMount(){
+    const token = localStorage.getItem("");
+   if(token === null)  this.props.goToLoginPage();
+  }
     render() {
       return (
         <div>
