@@ -12,30 +12,40 @@ class LoginPage extends Component {
       password: "",
     };
   }
+
   handleEmailChange = (event) => {
     this.setState({ email: event.target.value });
   };
+
   onPasswordChange = (event) => {
     this.setState({ password: event.target.value });
   };
+
   onClickSubmit = (event) => {
     this.setState(this.state.value);
     event.preventDefault();
   };
 
+  handleSubmit = async (event) => {
+    event.preventDefault();
+    await this.login();
+    this.props.goToPaginaDePost();
+  };
+
   login = async () => {
-    const body = {email: this.state.email, password: this.state.password}
+    const body = { email: this.state.email, password: this.state.password };
     const response = await axios.post(
-      "https://us-central1-future-apis.cloudfunctions.net/fourEddit/login"
+      "https://us-central1-future-apis.cloudfunctions.net/fourEddit/login",
+      body
     );
-    console.log(response.data.login)
+    console.log(response);
+    localStorage.setItem("token", response.data.token);
   };
 
   render() {
-    console.log(this.props);
     return (
       <div>
-        <form>
+        <form onSubmit={this.handleSubmit}>
           <label>Email:</label>
           <input
             required
@@ -64,7 +74,7 @@ class LoginPage extends Component {
 const mapDispatchToProps = (dispatch) => {
   return {
     goToSignUp: () => dispatch(push(routes.cadastro)),
-
+    goToPaginaDePost: () => dispatch(push(routes.paginaDePost)),
   };
 };
 
