@@ -4,32 +4,27 @@ import { push } from "connected-react-router";
 import { routes } from "../Router";
 
 class PaginaDePost extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
-    this.state = {
-      
-    }
+    this.state = {};
   }
-  componentDidMount(){
+  componentDidMount() {
     const token = localStorage.getItem("token");
-   if(token === null)  this.props.goToLoginPage();
+    if (token === null) this.props.goToLoginPage();
   }
-    render() {
-      return (
-        <div>
-          <button onClick={this.props.goToLoginPage}>Login</button>
-        </div>
-      );
-    }
+  render() {
+    return (
+      <div>
+        <button onClick={this.props.goToLoginPage}>Login</button>
+      </div>
+    );
   }
-  
+}
+
 const mapDispatchToProps = (dispatch) => {
   return {
     goToLoginPage: () => dispatch(push(routes.root)),
   };
 };
 
-
-
-  export default connect(null, mapDispatchToProps)(PaginaDePost);
-  
+export default connect(null, mapDispatchToProps)(PaginaDePost);
