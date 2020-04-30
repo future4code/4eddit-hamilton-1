@@ -40,7 +40,7 @@ export default class PostsPage extends Component {
                 </RateButton>
               </RateBar>
               <PostContent>
-                <PostUser>{post.title}</PostUser>
+                <PostTitle>{post.title}</PostTitle>
                 <PostText>{post.text}</PostText>
                 <PostActions>
                   <PostButton>
@@ -219,6 +219,10 @@ const PostContent = styled.div`
 `;
 
 const PostUser = styled.p`
+  
+`;
+
+const PostTitle = styled.p`
   margin: 0;
   font-size: 16px;
   font-weight: 700;
