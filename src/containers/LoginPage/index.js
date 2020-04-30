@@ -29,7 +29,7 @@ class LoginPage extends Component {
   handleSubmit = async (event) => {
     event.preventDefault();
     await this.login();
-    this.props.goToPaginaDePost();
+    this.props.goToListaDePosts();
   };
 
   login = async () => {
@@ -74,7 +74,7 @@ class LoginPage extends Component {
 const mapDispatchToProps = (dispatch) => {
   return {
     goToSignUp: () => dispatch(push(routes.cadastro)),
-    goToPaginaDePost: () => dispatch(push(routes.paginaDePost)),
+    goToListaDePosts: () => dispatch(push(routes.listaDePosts)),
   };
 };
 
