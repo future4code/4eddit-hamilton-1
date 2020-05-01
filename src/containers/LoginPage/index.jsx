@@ -75,6 +75,7 @@ class LoginPage extends Component {
       );
 
       localStorage.setItem("token", response.data.token);
+      this.props.goToPostList();
     } catch (err) {}
   };
 
