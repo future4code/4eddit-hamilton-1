@@ -4,16 +4,17 @@ import { Switch, Route } from "react-router-dom";
 import LoginPage from "../LoginPage";
 import PostsPage from "../PostsPage";
 
-const routes = {
+export const routes = {
   root: "/",
-  // Outras rotas aqui
+  postList: "/post-list",
 };
 
 function Router(props) {
   return (
     <ConnectedRouter history={props.history}>
       <Switch>
-        <Route path={routes.root} component={PostsPage} />
+        <Route exact path={routes.root} component={LoginPage} />
+        <Route exact path={routes.postList} component={PostsPage} />
       </Switch>
     </ConnectedRouter>
   );
