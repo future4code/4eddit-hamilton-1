@@ -5,19 +5,33 @@ import styled from "styled-components";
 import Comment from "../Comment";
 import { Btn, DefaultBox, InputField, RateButton } from "../global-style";
 import moment from "moment/moment";
+import { vote } from "../../actions/post";
+import { connect } from "react-redux";
 
-export default class index extends Component {
+class Post extends Component {
   render() {
-    const { post } = this.props;
+    const { post, vote } = this.props;
     return (
       <Container>
         <RateBar>
-          <RateButton>
-            <GoArrowUp color="#fff" size="20px" />
+          <RateButton
+            onClick={() => vote(post.id, post.userVoteDirection === 1 ? 0 : 1)}
+          >
+            <GoArrowUp
+              color={post.userVoteDirection !== 1 ? "#fff" : "#555"}
+              size="20px"
+            />
           </RateButton>
           <RatePoints>{post.votesCount}</RatePoints>
-          <RateButton>
-            <GoArrowDown color="#fff" size="20px" />
+          <RateButton
+            onClick={() =>
+              vote(post.id, post.userVoteDirection === -1 ? 0 : -1)
+            }
+          >
+            <GoArrowDown
+              color={post.userVoteDirection !== -1 ? "#fff" : "#555"}
+              size="20px"
+            />
           </RateButton>
         </RateBar>
         <PostContent>
@@ -43,6 +57,12 @@ export default class index extends Component {
     );
   }
 }
+
+const dispatchToProps = {
+  vote: (postId, dir) => vote(postId, dir),
+};
+
+export default connect(null, dispatchToProps)(Post);
 
 const Container = styled(DefaultBox)`
   box-sizing: border-box;

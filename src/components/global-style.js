@@ -1,9 +1,12 @@
 import styled from "styled-components";
+import {} from "react-icons/fi";
 
 export const Btn = styled.button.attrs((props) => ({
   bg: props.inverted ? "transparent" : "#ed7f61",
   fc: props.inverted ? "#ed7f61" : "white",
 }))`
+  /* transition: 0.2s;
+  width: ${(props) => props.width || "auto"}; */
   border: 1px solid #ed7f61;
   background-color: ${(props) => props.bg};
   color: ${(props) => props.fc};

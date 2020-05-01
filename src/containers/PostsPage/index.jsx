@@ -5,9 +5,18 @@ import Header from "../../components/Header";
 import CreatePostForm from "../../components/CreatePostForm";
 import { getPosts } from "../../actions/post";
 import { connect } from "react-redux";
-import { push, replace } from "connected-react-router";
+import { replace } from "connected-react-router";
 import { routes } from "../Router";
 import { Btn } from "../../components/global-style";
+
+// commentsCount: 34
+// createdAt: 1585748516971
+// id: "0COaXIBbosGCvdIMNv9Y"
+// text: "E ele morreu!"
+// title: "Atirei o pau no gato!"
+// userVoteDirection: 0
+// username: "SeiLa"
+// votesCount: 8
 
 class PostsPage extends Component {
   state = {
@@ -34,12 +43,9 @@ class PostsPage extends Component {
         <Header />
         <Main>
           <CreatePostForm />
-          {postList
-            .sort((a, b) => b.createdAt - a.createdAt)
-            .slice(0, numberOfPost)
-            .map((post) => (
-              <Post post={post} />
-            ))}
+          {postList.map((post) => (
+            <Post key={post.id} post={post} />
+          ))}
           {postList.length > numberOfPost && (
             <LoadBtn onClick={this.loadMorePosts}>Load More</LoadBtn>
           )}
