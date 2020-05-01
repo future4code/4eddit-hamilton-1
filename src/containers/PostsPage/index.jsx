@@ -43,7 +43,7 @@ class PostsPage extends Component {
         <Header />
         <Main>
           <CreatePostForm />
-          {postList.map((post) => (
+          {postList.slice(0, numberOfPost).map((post) => (
             <Post key={post.id} post={post} />
           ))}
           {postList.length > numberOfPost && (
