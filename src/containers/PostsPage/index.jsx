@@ -3,39 +3,62 @@ import styled from "styled-components";
 import Post from "../../components/Post";
 import Header from "../../components/Header";
 import CreatePostForm from "../../components/CreatePostForm";
+import { getPosts } from "../../actions/post";
+import { connect } from "react-redux";
+import { push, replace } from "connected-react-router";
+import { routes } from "../Router";
+import { Btn } from "../../components/global-style";
 
-const postMock = [
-  {
-    title: "Título",
-    user: "Usuário",
-    text:
-      "Texto legal sdasd asd sa dasd adasd asdsa sa dasadasd asdsa sa dasd adasd asdsa sa dasd adasdasdsa sa dasd adasd asdsa",
-    votes: 5,
-    comments: [
-      {
-        user: "Darvas",
-        text: "Comentário muito bom",
-        points: 10,
-      },
-    ],
-  },
-];
+class PostsPage extends Component {
+  state = {
+    numberOfPost: 10,
+  };
 
-export default class PostsPage extends Component {
+  componentDidMount() {
+    if (localStorage.getItem("token") === null) this.props.goToLogin();
+    else this.props.fecthPosts();
+  }
+
+  loadMorePosts = () => {
+    this.setState({
+      numberOfPost: this.state.numberOfPost + 10,
+    });
+  };
+
   render() {
+    const { postList } = this.props;
+    const { numberOfPost } = this.state;
+
     return (
       <Container>
         <Header />
         <Main>
           <CreatePostForm />
-          {postMock.map((post) => (
-            <Post post={post} />
-          ))}
+          {postList
+            .sort((a, b) => b.createdAt - a.createdAt)
+            .slice(0, numberOfPost)
+            .map((post) => (
+              <Post post={post} />
+            ))}
+          {postList.length > numberOfPost && (
+            <LoadBtn onClick={this.loadMorePosts}>Load More</LoadBtn>
+          )}
         </Main>
       </Container>
     );
   }
 }
+
+const mapStateToProps = (state) => ({
+  postList: state.post.list,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  goToLogin: () => dispatch(replace(routes.root)),
+  fecthPosts: () => dispatch(getPosts()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(PostsPage);
 
 const Container = styled.div`
   width: 100%;
@@ -53,4 +76,9 @@ const Main = styled.main`
   align-items: flex-start;
   align-content: flex-start;
   row-gap: 8px;
+`;
+
+const LoadBtn = styled(Btn)`
+  width: 100%;
+  max-width: 640px;
 `;

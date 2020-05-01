@@ -2,13 +2,23 @@ import React, { Component } from "react";
 import styled, { keyframes } from "styled-components";
 import { Btn } from "../global-style";
 import logo from "../../imgs/logo.png";
+import { connect } from "react-redux";
+import { replace } from "connected-react-router";
+import { routes } from "../../containers/Router";
 
-export default class Header extends Component {
+class Header extends Component {
   render() {
     return (
       <Container>
         <Logo src={logo} />
-        <LogoutBtn>Logout</LogoutBtn>
+        <LogoutBtn
+          onClick={() => {
+            localStorage.clear();
+            this.props.goToLogin();
+          }}
+        >
+          Logout
+        </LogoutBtn>
         <FakeHeader>
           <FakeLogo src={logo} />
         </FakeHeader>
@@ -16,6 +26,12 @@ export default class Header extends Component {
     );
   }
 }
+
+const mapDispatchToProps = {
+  goToLogin: () => replace(routes.root),
+};
+
+export default connect(null, mapDispatchToProps)(Header);
 
 const Container = styled.header`
   position: relative;
@@ -78,5 +94,5 @@ const FakeLogo = styled.img`
   height: 40px;
   left: 78.15px;
   transform: translate(-50%, -50%);
-  animation: ${FakeLogoAnimation} .75s;
+  animation: ${FakeLogoAnimation} 0.75s;
 `;

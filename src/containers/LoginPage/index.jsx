@@ -4,11 +4,15 @@ import { InputField, Btn } from "../../components/global-style";
 import { connect } from "react-redux";
 import { push } from "connected-react-router";
 import { routes } from "../Router";
+import axios from "axios";
 
 class LoginPage extends Component {
   state = {
     loading: false,
     loginForm: true,
+    username: "",
+    email: "",
+    password: "",
   };
 
   handleLoginSubmit = (event) => {
@@ -16,20 +20,67 @@ class LoginPage extends Component {
     this.setState({
       loading: true,
     });
-    setTimeout(() => this.props.goToPostList(), 2000);
+    this.login();
   };
 
   handleSignUpSubmit = (event) => {
     event.preventDefault();
+    this.setState({
+      loading: true,
+    });
+    this.signUp();
+  };
+
+  handleChange = (event) => {
+    this.setState({
+      [event.target.name]: event.target.value,
+    });
   };
 
   toggleForm = () => {
     this.setState({
       loginForm: !this.state.loginForm,
+      userName: "",
+      email: "",
+      password: "",
     });
   };
 
+  login = async () => {
+    try {
+      const body = {
+        email: this.state.email,
+        password: this.state.password,
+      };
+      const response = await axios.post(
+        "https://us-central1-future-apis.cloudfunctions.net/fourEddit/login",
+        body
+      );
+
+      localStorage.setItem("token", response.data.token);
+      this.props.goToPostList();
+    } catch (err) {}
+  };
+
+  signUp = async () => {
+    try {
+      const body = {
+        email: this.state.email,
+        password: this.state.password,
+        username: this.state.username,
+      };
+      const response = await axios.post(
+        "https://us-central1-future-apis.cloudfunctions.net/fourEddit/signup",
+        body
+      );
+
+      localStorage.setItem("token", response.data.token);
+    } catch (err) {}
+  };
+
   render() {
+    const { username, email, password } = this.state;
+
     return (
       <Container>
         <Logo src={require("../../imgs/logo.png")} />
@@ -39,25 +90,57 @@ class LoginPage extends Component {
             loginForm={this.state.loginForm}
             onSubmit={this.handleLoginSubmit}
           >
-            <InputField placeholder="Username" />
-            <InputField type="password" placeholder="Password" />
+            <InputField
+              placeholder="Email"
+              type="email"
+              name={"email"}
+              value={email}
+              onChange={this.handleChange}
+              required
+            />
+            <InputField
+              type="password"
+              placeholder="Password"
+              name="password"
+              value={password}
+              onChange={this.handleChange}
+              required
+            />
             <LoginBtn type="submit">Log In</LoginBtn>
             <SignUpMsg>
               New to 4eddit?{" "}
               <SignUPBtn onClick={this.toggleForm}>Sign UP</SignUPBtn>
             </SignUpMsg>
-            <Loading loading={this.state.loading}>
-              {/* <img src={require("../../imgs/fire-logo.png")} /> */}
-            </Loading>
+            <Loading loading={this.state.loading} />
           </Form>
           <Form
             loading={this.state.loading}
             loginForm={!this.state.loginForm}
-            onSubmit={this.handleLoginSubmit}
+            onSubmit={this.handleSignUpSubmit}
           >
-            <InputField placeholder="Username" />
-            <InputField type="email" placeholder="Email" />
-            <InputField type="password" placeholder="Password" />
+            <InputField
+              placeholder="Username"
+              name={"username"}
+              value={username}
+              onChange={this.handleChange}
+              required
+            />
+            <InputField
+              type="email"
+              placeholder="Email"
+              name={"email"}
+              value={email}
+              onChange={this.handleChange}
+              required
+            />
+            <InputField
+              type="password"
+              placeholder="Password"
+              name="password"
+              value={password}
+              onChange={this.handleChange}
+              required
+            />
             <LoginBtn type="submit">Sign Up</LoginBtn>
             <SignUpMsg>
               Already a 4edditor?{" "}
@@ -130,7 +213,7 @@ const Form = styled.form`
     props.loading &&
     css`
       animation: ${TestAnimation} 0.5s forwards,
-        ${loadingAnimaton2} 1s ease-in-out 0.4s infinite;
+        ${loadingAnimaton2} 1s ease-in-out 0.4s infinite alternate;
     `}
 `;
 

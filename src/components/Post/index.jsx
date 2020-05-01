@@ -1,9 +1,10 @@
 import React, { Component } from "react";
-import styled from "styled-components";
-import { GoArrowUp, GoArrowDown } from "react-icons/go";
 import { FaCommentAlt } from "react-icons/fa";
-import { Btn, InputField, DefaultBox, RateButton } from "../global-style";
+import { GoArrowDown, GoArrowUp } from "react-icons/go";
+import styled from "styled-components";
 import Comment from "../Comment";
+import { Btn, DefaultBox, InputField, RateButton } from "../global-style";
+import moment from "moment/moment";
 
 export default class index extends Component {
   render() {
@@ -14,27 +15,30 @@ export default class index extends Component {
           <RateButton>
             <GoArrowUp color="#fff" size="20px" />
           </RateButton>
-          <RatePoints>{post.votes}</RatePoints>
+          <RatePoints>{post.votesCount}</RatePoints>
           <RateButton>
             <GoArrowDown color="#fff" size="20px" />
           </RateButton>
         </RateBar>
         <PostContent>
-          <PostUser>Posted by {post.user}</PostUser>
+          <PostUser>
+            Posted by {post.username}{" "}
+            {moment(post.createdAt).startOf("hour").fromNow()}{" "}
+          </PostUser>
           <PostTitle>{post.title}</PostTitle>
           <PostText>{post.text}</PostText>
           <PostActions>
             <PostButton>
               <FaCommentAlt />
-              {post.comments.length} Comments
+              {post.commentsCount} Comments
             </PostButton>
           </PostActions>
-          <InputField as="TextArea" placeholder="What are your thoughts?" />
-          <Btn type="submit">Comment</Btn>
+          {/* <InputField as="TextArea" placeholder="What are your thoughts?" />
+          <Btn type="submit">Comment</Btn> */}
         </PostContent>
-        {post.comments.map((comment) => (
+        {/* {post.comments.map((comment) => (
           <Comment comment={comment} />
-        ))}
+        ))} */}
       </Container>
     );
   }
