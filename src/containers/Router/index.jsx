@@ -2,17 +2,11 @@ import React from "react";
 import { ConnectedRouter } from "connected-react-router";
 import { Switch, Route } from "react-router-dom";
 import LoginPage from "../LoginPage";
-import Cadastro from "../Cadastro";
-import ListaDePosts from "../ListaDePosts";
-import PaginaDePost from "../PaginaDePost";
-
+import PostsPage from "../PostsPage";
 
 export const routes = {
   root: "/",
-  cadastro: "/cadastro",
-  listaDePosts: "/listaDePosts",
-  paginaDePost: "/paginaDePost",
-
+  postList: "/post-list",
 };
 
 function Router(props) {
@@ -20,9 +14,7 @@ function Router(props) {
     <ConnectedRouter history={props.history}>
       <Switch>
         <Route exact path={routes.root} component={LoginPage} />
-        <Route exact path={routes.cadastro} component={Cadastro} />
-        <Route exact path={routes.listaDePosts} component={ListaDePosts} />
-        <Route exact path={routes.paginaDePost} component={PaginaDePost} />
+        <Route exact path={routes.postList} component={PostsPage} />
       </Switch>
     </ConnectedRouter>
   );
