@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { FaCommentAlt } from "react-icons/fa";
+import { RiArrowUpSLine } from "react-icons/ri";
 import { GoArrowDown, GoArrowUp } from "react-icons/go";
 import styled from "styled-components";
 import Comment from "../Comment";
@@ -7,10 +8,81 @@ import { Btn, DefaultBox, InputField, RateButton } from "../global-style";
 import moment from "moment/moment";
 import { vote } from "../../actions/post";
 import { connect } from "react-redux";
+import axios from "axios";
 
 class Post extends Component {
+  constructor(props) {
+    super(props);
+
+    this.postSizeRef = React.createRef();
+    this.commentsSizeRef = React.createRef();
+  }
+
+  state = {
+    showComments: false,
+    contentHeight: 200,
+    commentHeight: 300,
+    comments: null,
+  };
+
+  showComments = () => {
+    this.setState({
+      showComments: !this.state.showComments,
+    });
+    if (!this.state.comments) this.getPostDetail();
+  };
+
+  updateContentHeight = () => {
+    this.setState({
+      contentHeight: this.postSizeRef.current.offsetHeight,
+    });
+  };
+
+  updateCommentHeight = () => {
+    this.setState({
+      commentHeight: this.commentsSizeRef.current.offsetHeight,
+    });
+  };
+
+  componentDidMount() {
+    if (this.postSizeRef.current) this.updateContentHeight();
+
+    if (this.commentsSizeRef.current) this.updateCommentHeight();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.contentHeight !== this.postSizeRef.current.offsetHeight)
+      this.updateContentHeight();
+
+    if (prevState.commentHeight !== this.commentsSizeRef.current.offsetHeight)
+      this.updateCommentHeight();
+  }
+
+  getPostDetail = async () => {
+    try {
+      const response = await axios.get(
+        `https://us-central1-future-apis.cloudfunctions.net/fourEddit/posts/${this.props.post.id}`,
+        {
+          headers: {
+            auth: localStorage.getItem("token"),
+          },
+        }
+      );
+
+      console.log(response);
+
+      this.setState({
+        comments: response.data.post.comments,
+      });
+    } catch (err) {
+      console.log("getPostDetail " + err);
+    }
+  };
+
   render() {
     const { post, vote } = this.props;
+    const { showComments, contentHeight, comments, commentHeight } = this.state;
+
     return (
       <Container>
         <RateBar>
@@ -34,25 +106,43 @@ class Post extends Component {
             />
           </RateButton>
         </RateBar>
-        <PostContent>
-          <PostUser>
-            Posted by {post.username}{" "}
-            {moment(post.createdAt).startOf("hour").fromNow()}{" "}
-          </PostUser>
-          <PostTitle>{post.title}</PostTitle>
-          <PostText>{post.text}</PostText>
-          <PostActions>
-            <PostButton>
-              <FaCommentAlt />
-              {post.commentsCount} Comments
-            </PostButton>
-          </PostActions>
-          {/* <InputField as="TextArea" placeholder="What are your thoughts?" />
-          <Btn type="submit">Comment</Btn> */}
-        </PostContent>
-        {/* {post.comments.map((comment) => (
-          <Comment comment={comment} />
-        ))} */}
+        <PostContentView contentHeight={contentHeight}>
+          <PostContent ref={this.postSizeRef}>
+            <PostUser>
+              Posted by {post.username}{" "}
+              {moment(post.createdAt).startOf("hour").fromNow()}{" "}
+            </PostUser>
+            <PostTitle>{post.title}</PostTitle>
+            <PostText>{post.text}</PostText>
+            <PostActions>
+              <PostButton onClick={this.showComments}>
+                <FaCommentAlt />
+                {post.commentsCount} Comments{"  "}
+                <RotatableIcon showComments={showComments}>
+                  <RiArrowUpSLine size="16px" />
+                </RotatableIcon>
+              </PostButton>
+            </PostActions>
+            {showComments && (
+              <>
+                <InputField
+                  as="textarea"
+                  placeholder="What are your thoughts?"
+                />
+                <Btn type="submit">Comment</Btn>
+              </>
+            )}
+          </PostContent>
+        </PostContentView>
+        <CommentsContainerView commentHeight={commentHeight}>
+          <CommentsContainer ref={this.commentsSizeRef}>
+            {comments &&
+              showComments &&
+              comments.map((comment) => (
+                <Comment key={comment.id} comment={comment} />
+              ))}
+          </CommentsContainer>
+        </CommentsContainerView>
       </Container>
     );
   }
@@ -96,7 +186,18 @@ const RateBar = styled.div`
   padding: 8px 4px;
 `;
 
+const PostContentView = styled.div`
+  position: relative;
+  overflow: hidden;
+  height: ${({ contentHeight }) => `${contentHeight}px`};
+  transition: 0.2s ease-out;
+`;
+
 const PostContent = styled.div`
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
   padding: 8px;
   display: grid;
   justify-items: flex-start;
@@ -126,12 +227,13 @@ const PostActions = styled.div`
 
 const PostButton = styled.div`
   display: grid;
-  grid-template-columns: 20px 1fr;
+  grid-template-columns: 20px 1fr 20px;
   align-items: center;
   color: #999;
   padding: 4px;
   border-radius: 4px;
   font-size: 12px;
+  user-select: none;
 
   &:hover {
     background-color: #eee;
@@ -141,4 +243,30 @@ const PostButton = styled.div`
 const RatePoints = styled.p`
   color: #fff;
   font-weight: bold;
+`;
+
+const RotatableIcon = styled.div`
+  transition: 0.2s ease-out;
+  transform: rotate(${(props) => (props.showComments ? "180deg" : "0deg")});
+  display: grid;
+  place-content: center;
+`;
+
+const CommentsContainerView = styled.div`
+  position: relative;
+  grid-column: 1/3;
+  overflow: hidden;
+  height: ${({ commentHeight }) => `${commentHeight}px`};
+  transition: 0.2s ease-out;
+`;
+
+const CommentsContainer = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: grid;
+  grid-auto-flow: row;
+  row-gap: 12px;
+  padding-bottom: 16px;
 `;

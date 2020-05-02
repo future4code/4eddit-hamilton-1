@@ -2,6 +2,19 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import { GoArrowUp, GoArrowDown } from "react-icons/go";
 import { RateButton } from "../global-style";
+import moment from "moment/moment";
+
+// createdAt: 1588432757628
+// ​​​​​
+// id: "gJHa2rOhzxV2u00gVJ5l"
+// ​​​​​
+// text: "breiq bed"
+// ​​​​​
+// userVoteDirection: 0
+// ​​​​​
+// username: "dolucasduarte"
+// ​​​​​
+// votesCount: 1
 
 export default class index extends Component {
   render() {
@@ -9,7 +22,12 @@ export default class index extends Component {
     return (
       <PostComment>
         <CommentUser>
-          {comment.user} <CommentPoints> {comment.points} points</CommentPoints>
+          {comment.username}{" "}
+          <CommentPoints>
+            {" "}
+            {comment.votesCount || 0} points •{" "}
+            {moment(comment.createdAt).startOf("hour").fromNow()}
+          </CommentPoints>
         </CommentUser>
         <CommentText>{comment.text}</CommentText>
         <CommentRating>
@@ -26,13 +44,13 @@ export default class index extends Component {
 }
 
 const PostComment = styled.div`
+  box-sizing: border-box;
   position: relative;
   width: 100%;
-  grid-column: 1/3;
   border-left: 2px solid #ddd;
-  margin: 24px 0;
   margin-left: 20px;
   padding-left: 20px;
+  padding-right: 20px;
 `;
 
 const CommentUser = styled.p`
