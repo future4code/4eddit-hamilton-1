@@ -8,6 +8,8 @@ import { connect } from "react-redux";
 import { replace } from "connected-react-router";
 import { routes } from "../Router";
 import { Btn } from "../../components/global-style";
+import ExhibitionMenu from "../../components/ExhibitionMenu";
+import jwtDecode from "jwt-decode";
 
 // commentsCount: 34
 // createdAt: 1585748516971
@@ -34,19 +36,48 @@ class PostsPage extends Component {
     });
   };
 
+  sortPosts = () => {
+    switch (this.props.sort) {
+      case "new":
+        this.props.postList.sort((a, b) => b.createdAt - a.createdAt);
+        break;
+      case "top_rated":
+        this.props.postList.sort((a, b) => b.votesCount - a.votesCount);
+        break;
+      case "hot":
+        this.props.postList.sort((a, b) => b.commentsCount - a.commentsCount);
+        break;
+      default:
+        break;
+    }
+  };
+
+  filterPosts = () => {
+    switch (this.props.filter) {
+      case "my_posts":
+        const username = jwtDecode(localStorage.getItem("token")).username;
+        return this.props.postList.filter((post) => post.username === username);
+      default:
+        return this.props.postList;
+    }
+  };
+
   render() {
-    const { postList } = this.props;
     const { numberOfPost } = this.state;
+
+    this.sortPosts();
+    const filteredPostList = this.filterPosts();
 
     return (
       <Container>
         <Header />
         <Main>
+          <ExhibitionMenu />
           <CreatePostForm />
-          {postList.slice(0, numberOfPost).map((post) => (
+          {filteredPostList.slice(0, numberOfPost).map((post) => (
             <Post key={post.id} post={post} />
           ))}
-          {postList.length > numberOfPost && (
+          {filteredPostList.length > numberOfPost && (
             <LoadBtn onClick={this.loadMorePosts}>Load More</LoadBtn>
           )}
         </Main>
@@ -57,6 +88,8 @@ class PostsPage extends Component {
 
 const mapStateToProps = (state) => ({
   postList: state.post.list,
+  filter: state.exhibition.filter,
+  sort: state.exhibition.sort,
 });
 
 const mapDispatchToProps = (dispatch) => ({

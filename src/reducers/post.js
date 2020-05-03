@@ -12,7 +12,6 @@ export const postReducer = (state = initialState, action) => {
       };
     case "FETCH_POSTS":
       let list = action.payload.list;
-      list.sort((a, b) => b.createdAt - a.createdAt);
       return {
         ...state,
         list,

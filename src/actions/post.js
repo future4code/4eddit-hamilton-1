@@ -56,6 +56,8 @@ export const createPost = (title, text) => async (dispatch) => {
       }
     );
 
+    // console.log(response);
+
     dispatch(getPosts());
   } catch (err) {}
 };

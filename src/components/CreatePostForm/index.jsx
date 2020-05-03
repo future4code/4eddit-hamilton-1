@@ -41,6 +41,7 @@ class CreatePostForm extends Component {
         />
         <InputField
           as="textarea"
+          required
           value={text}
           onChange={this.handleChange}
           name="text"
@@ -89,4 +90,5 @@ const Form = styled(DefaultBox)`
   padding: 16px;
   display: grid;
   row-gap: 16px;
+  cursor: auto;
 `;

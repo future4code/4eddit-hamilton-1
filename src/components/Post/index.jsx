@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { FaCommentAlt } from "react-icons/fa";
 import { RiArrowUpSLine } from "react-icons/ri";
 import { GoArrowDown, GoArrowUp } from "react-icons/go";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import Comment from "../Comment";
 import { Btn, DefaultBox, InputField, RateButton } from "../global-style";
 import moment from "moment/moment";
@@ -20,8 +20,8 @@ class Post extends Component {
 
   state = {
     showComments: false,
-    contentHeight: 200,
-    commentHeight: 300,
+    contentHeight: 0,
+    commentHeight: 0,
     comments: null,
   };
 
@@ -154,12 +154,23 @@ const dispatchToProps = {
 
 export default connect(null, dispatchToProps)(Post);
 
+const expand = keyframes`
+  0%{
+    transform: scale(0);
+  }
+  100%{
+    transform: scale(1);
+  }
+`;
+
 const Container = styled(DefaultBox)`
   box-sizing: border-box;
   display: grid;
   grid-template-columns: 40px 1fr;
   border: 1px solid #fff;
   transition: transform 0.2s, box-shadow 0.2s;
+  animation: ${expand} .2s ease-out;
+
   &:hover {
     border: 1px solid #999;
     transform: translateY(-4px);
