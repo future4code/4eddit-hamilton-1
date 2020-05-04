@@ -10,6 +10,7 @@ import { routes } from "../Router";
 import { Btn } from "../../components/global-style";
 import ExhibitionMenu from "../../components/ExhibitionMenu";
 import jwtDecode from "jwt-decode";
+import PostMock from "../../components/PostMock";
 
 // commentsCount: 34
 // createdAt: 1585748516971
@@ -67,18 +68,23 @@ class PostsPage extends Component {
 
     this.sortPosts();
     const filteredPostList = this.filterPosts();
-
     return (
       <Container>
         <Header />
         <Main>
           <ExhibitionMenu />
           <CreatePostForm />
-          {filteredPostList.slice(0, numberOfPost).map((post) => (
-            <Post key={post.id} post={post} />
-          ))}
-          {filteredPostList.length > numberOfPost && (
-            <LoadBtn onClick={this.loadMorePosts}>Load More</LoadBtn>
+          {filteredPostList.length > 0 ? (
+            <>
+              {filteredPostList.slice(0, numberOfPost).map((post) => (
+                <Post key={post.id} post={post} />
+              ))}
+              {filteredPostList.length > numberOfPost && (
+                <LoadBtn onClick={this.loadMorePosts}>Load More</LoadBtn>
+              )}
+            </>
+          ) : (
+            new Array(5).fill("").map((_, i) => <PostMock key={i} />)
           )}
         </Main>
       </Container>

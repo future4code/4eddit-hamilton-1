@@ -1,14 +1,15 @@
+import axios from "axios";
+import moment from "moment/moment";
 import React, { Component } from "react";
 import { FaCommentAlt } from "react-icons/fa";
-import { RiArrowUpSLine } from "react-icons/ri";
 import { GoArrowDown, GoArrowUp } from "react-icons/go";
-import styled, { keyframes } from "styled-components";
-import Comment from "../Comment";
-import { Btn, DefaultBox, InputField, RateButton } from "../global-style";
-import moment from "moment/moment";
-import { vote } from "../../actions/post";
+import { RiArrowUpSLine } from "react-icons/ri";
 import { connect } from "react-redux";
-import axios from "axios";
+import styled, { keyframes } from "styled-components";
+import { vote } from "../../actions/post";
+import Comment from "../Comment";
+import CreateCommentForm from "../CreateCommentForm";
+import { DefaultBox, RateButton } from "../global-style";
 
 class Post extends Component {
   constructor(props) {
@@ -29,7 +30,7 @@ class Post extends Component {
     this.setState({
       showComments: !this.state.showComments,
     });
-    if (!this.state.comments) this.getPostDetail();
+    if (!this.state.comments) this.getPostComments();
   };
 
   updateContentHeight = () => {
@@ -58,7 +59,7 @@ class Post extends Component {
       this.updateCommentHeight();
   }
 
-  getPostDetail = async () => {
+  getPostComments = async () => {
     try {
       const response = await axios.get(
         `https://us-central1-future-apis.cloudfunctions.net/fourEddit/posts/${this.props.post.id}`,
@@ -69,13 +70,11 @@ class Post extends Component {
         }
       );
 
-      console.log(response);
-
       this.setState({
         comments: response.data.post.comments,
       });
     } catch (err) {
-      console.log("getPostDetail " + err);
+      console.log("getPostComments " + err);
     }
   };
 
@@ -124,13 +123,10 @@ class Post extends Component {
               </PostButton>
             </PostActions>
             {showComments && (
-              <>
-                <InputField
-                  as="textarea"
-                  placeholder="What are your thoughts?"
-                />
-                <Btn type="submit">Comment</Btn>
-              </>
+              <CreateCommentForm
+                getPostComments={this.getPostComments}
+                postId={post.id}
+              />
             )}
           </PostContent>
         </PostContentView>
@@ -139,7 +135,7 @@ class Post extends Component {
             {comments &&
               showComments &&
               comments.map((comment) => (
-                <Comment key={comment.id} comment={comment} />
+                <Comment key={comment.id} postId={post.id} comment={comment} />
               ))}
           </CommentsContainer>
         </CommentsContainerView>
@@ -169,7 +165,7 @@ const Container = styled(DefaultBox)`
   grid-template-columns: 40px 1fr;
   border: 1px solid #fff;
   transition: transform 0.2s, box-shadow 0.2s;
-  animation: ${expand} .2s ease-out;
+  animation: ${expand} 0.2s ease-out;
 
   &:hover {
     border: 1px solid #999;
@@ -209,7 +205,7 @@ const PostContent = styled.div`
   position: absolute;
   top: 0;
   left: 0;
-  padding: 8px;
+  padding: 8px 16px 8px 8px;
   display: grid;
   justify-items: flex-start;
   align-items: flex-start;
@@ -268,7 +264,7 @@ const CommentsContainerView = styled.div`
   grid-column: 1/3;
   overflow: hidden;
   height: ${({ commentHeight }) => `${commentHeight}px`};
-  transition: 0.2s ease-out;
+  transition: 0.2s linear;
 `;
 
 const CommentsContainer = styled.div`

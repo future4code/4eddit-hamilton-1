@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { GoArrowUp, GoArrowDown } from "react-icons/go";
 import { RateButton } from "../global-style";
 import moment from "moment/moment";
+import axios from "axios";
 
 // createdAt: 1588432757628
 // ​​​​​
@@ -17,6 +18,38 @@ import moment from "moment/moment";
 // votesCount: 1
 
 export default class index extends Component {
+  state = {
+    votesCount: 0,
+    userVoteDirection: 0,
+  };
+
+  voteComment = async (dir) => {
+    this.setState({
+      votesCount: this.state.votesCount - this.state.userVoteDirection + dir,
+      userVoteDirection: dir,
+    });
+    try {
+      axios.put(
+        `https://us-central1-future-apis.cloudfunctions.net/fourEddit/posts/${this.props.postId}/comment/${this.props.comment.id}/vote`,
+        {
+          direction: dir,
+        },
+        {
+          headers: {
+            auth: localStorage.getItem("token"),
+          },
+        }
+      );
+    } catch (err) {}
+  };
+
+  componentDidMount() {
+    this.setState({
+      userVoteDirection: this.props.comment.userVoteDirection,
+      votesCount: this.props.comment.votesCount,
+    });
+  }
+
   render() {
     const { comment } = this.props;
     return (
@@ -25,17 +58,31 @@ export default class index extends Component {
           {comment.username}{" "}
           <CommentPoints>
             {" "}
-            {comment.votesCount || 0} points •{" "}
+            {this.state.votesCount || 0} points •{" "}
             {moment(comment.createdAt).startOf("hour").fromNow()}
           </CommentPoints>
         </CommentUser>
         <CommentText>{comment.text}</CommentText>
         <CommentRating>
-          <CommentRateBtn>
-            <GoArrowUp color="#999" size="20px" />
+          <CommentRateBtn
+            onClick={() =>
+              this.voteComment(this.state.userVoteDirection === 1 ? 0 : 1)
+            }
+          >
+            <GoArrowUp
+              color={this.state.userVoteDirection !== 1 ? "#999" : "#333"}
+              size="20px"
+            />
           </CommentRateBtn>
-          <CommentRateBtn>
-            <GoArrowDown color="#999" size="20px" />
+          <CommentRateBtn
+            onClick={() =>
+              this.voteComment(this.state.userVoteDirection === -1 ? 0 : -1)
+            }
+          >
+            <GoArrowDown
+              color={this.state.userVoteDirection !== -1 ? "#999" : "#333"}
+              size="20px"
+            />
           </CommentRateBtn>
         </CommentRating>
       </PostComment>
@@ -50,7 +97,7 @@ const PostComment = styled.div`
   border-left: 2px solid #ddd;
   margin-left: 20px;
   padding-left: 20px;
-  padding-right: 20px;
+  padding-right: 40px;
 `;
 
 const CommentUser = styled.p`

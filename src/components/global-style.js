@@ -11,7 +11,7 @@ export const Btn = styled.button.attrs((props) => ({
   background-color: ${(props) => props.bg};
   color: ${(props) => props.fc};
   font-size: 14px;
-  padding: 4px;
+  padding: 4px 8px;
   border-radius: 4px;
   cursor: pointer;
   font-weight: bold;
