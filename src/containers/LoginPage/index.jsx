@@ -176,8 +176,8 @@ const FormWrapper = styled.div`
   position: relative;
   transition: left 0.3s;
   top: 0;
-  left: ${(props) => (props.loginForm ? "25%" : "-25%")};
-  min-width: 800px;
+  left: ${(props) => (props.loginForm ? "51.5%" : "-51.5%")};
+  width: 200%;
   display: grid;
   grid-template-columns: 1fr 1fr;
   column-gap: 24px;

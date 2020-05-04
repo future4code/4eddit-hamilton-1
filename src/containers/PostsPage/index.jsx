@@ -115,7 +115,7 @@ const Container = styled.div`
 `;
 
 const Main = styled.main`
-  padding: 24px;
+  padding: 12px 8px;
   display: grid;
   justify-items: center;
   align-items: flex-start;

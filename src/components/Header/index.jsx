@@ -34,10 +34,11 @@ const mapDispatchToProps = {
 export default connect(null, mapDispatchToProps)(Header);
 
 const Container = styled.header`
+  width: 100%;
   position: relative;
   background-color: #ed7f61;
   box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.2);
-  padding: 4px 16px;
+  /* padding: 4px 16px; */
   display: grid;
   grid-auto-flow: column;
   justify-content: space-between;
@@ -46,7 +47,7 @@ const Container = styled.header`
 const LogoutBtn = styled(Btn)``;
 
 const Logo = styled.img`
-  height: 100%;
+  height: 48px;
   cursor: pointer;
 `;
 
